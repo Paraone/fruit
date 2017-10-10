@@ -7,7 +7,17 @@ class Item extends Component{
   constructor(props){
     super(props);
 
+    this.state = {
+      isMouseOver : false
+    }
+
     this.addToCart = this.addToCart.bind(this);
+  }
+
+  toggleName(){
+    let {isMouseOver} = this.state;
+    isMouseOver = !isMouseOver;
+    this.setState({isMouseOver});
   }
 
   addToCart(item){
@@ -28,13 +38,15 @@ class Item extends Component{
 
     return(
       <li className="col-md-3 col-sm-4">
-        <div className="item">
+        <div onMouseOver={() => this.toggleName()} onMouseOut={() => this.toggleName()} className="item">
           <div className="img"><img src={imgSrc} alt="Item Image"/></div>
-          <div className="itemName">{itemNameTemp || itemName}</div>
+          <div className="itemName">{
+            !this.state.isMouseOver ? itemNameTemp || itemName : itemName
+          }</div>
           <div className="priceLine"><span className="price">{`$${price}`}</span> <span className="quantityRemaining">{quantityRemaining} in stock</span></div>
         {quantityRemaining > 0 ?
           <div className="btn-primary btn" onClick={()=> this.addToCart(this.props.item)}>Add to Cart</div>
-        : <div className="btn-caution btn">Out of Stock</div>
+        : <div className="btn">Out of Stock</div>
         }
         </div>
       </li>
